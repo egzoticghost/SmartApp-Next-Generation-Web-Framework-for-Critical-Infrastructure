@@ -1,0 +1,47 @@
+﻿@page "/layout"
+@using Radzen;
+@using Radzen.Blazor;
+
+<PageTitle>Layout</PageTitle>
+
+<h1>Layout</h1>
+
+Sections are optional and can be omitted.
+
+<RadzenLayout Style="grid-template-columns: auto 1fr auto; grid-template-areas: 'rz-header rz-header rz-header' 'rz-sidebar rz-body rz-right-sidebar'">
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenSidebarToggle Click="@(() => leftSidebarExpanded = !leftSidebarExpanded)" />
+            <RadzenLabel Text="Header" />
+        </RadzenStack>
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@leftSidebarExpanded">
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Home" Icon="home" />
+            <RadzenPanelMenuItem Text="Users" Icon="account_box" />
+        </RadzenPanelMenu>
+        <div class="rz-p-4">
+            Left Sidebar
+        </div>
+    </RadzenSidebar>
+    <RadzenBody>
+        <div class="rz-p-4">
+            Body
+        </div>
+        <div class="rz-p-4">
+            <RadzenButton Text="Toggle left Sidebar" Click="@(() =>{ leftSidebarExpanded = !leftSidebarExpanded; StateHasChanged();})" />
+            <RadzenButton Text="Toggle right Sidebar" Click="@(() => rightSidebarExpanded = !rightSidebarExpanded)" />
+        </div>
+    </RadzenBody>
+    <RadzenSidebar @bind-Expanded="@rightSidebarExpanded" Style="width: 300px; grid-area: rz-right-sidebar">
+        <div class="rz-p-4">
+            Right Sidebar
+        </div>
+    </RadzenSidebar>
+    <RadzenSidebarToggle Click="@(() => rightSidebarExpanded = !rightSidebarExpanded)"   />
+</RadzenLayout>
+
+@code {
+    bool leftSidebarExpanded { get; set; } = true;
+    bool rightSidebarExpanded { get; set; } = true;
+}

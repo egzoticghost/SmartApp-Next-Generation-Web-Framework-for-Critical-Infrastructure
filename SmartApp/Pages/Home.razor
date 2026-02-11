@@ -1,0 +1,261 @@
+﻿@page "/"
+@using Radzen
+@using System.Text.Json
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, User!</h1>
+
+Welcome to your SmartApp. Getting started? <a href="/registration">Register here</a> or <a href="/login">Log In</a> - if you have an account ;)
+
+<div class="rz-p-sm-12" style="margin-bottom: 200px;">
+    <RadzenMenu Click="OnParentClicked">
+        <RadzenMenuItem Text="General" Icon="home">
+            <RadzenMenuItem Text="Buttons" Path="buttons" Icon="account_circle"></RadzenMenuItem>
+            <RadzenMenuItem Text="Menu" Path="menu" Icon="line_weight" Disabled="true"></RadzenMenuItem>
+            <RadzenMenuItem Click="OnChildClicked" Text="ChildClick" Icon="attach_file" Disabled="true"></RadzenMenuItem>
+            <RadzenMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenMenuItem>
+            <RadzenMenuItem Text="Notification" Path="notification" Icon="announcement"></RadzenMenuItem>
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="Inputs" Icon="payment" Disabled="true">
+            <RadzenMenuItem Text="CheckBox" Path="checkbox" Icon="check_circle"></RadzenMenuItem>
+            <RadzenMenuItem Text="TextBox" Path="textbox" Icon="input"></RadzenMenuItem>
+            <RadzenMenuItem Text="TextArea" Path="textarea" Icon="description"></RadzenMenuItem>
+            <RadzenMenuItem Text="Password" Path="password" Icon="payment"></RadzenMenuItem>
+            <RadzenMenuItem Text="Numeric" Path="numeric" Icon="aspect_ratio"></RadzenMenuItem>
+            <RadzenMenuItem Text="DatePicker" Path="datepicker" Icon="date_range"></RadzenMenuItem>
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="Data" Icon="save">
+            <RadzenMenuItem Text="DataGrid" Path="datagrid" Icon="grid_on"></RadzenMenuItem>
+            <RadzenMenuItem Text="DataList" Path="datalist" Icon="list"></RadzenMenuItem>
+            <RadzenMenuItem Text="DropDown" Path="dropdown" Icon="dns"></RadzenMenuItem>
+            <RadzenMenuItem Text="DropDownDataGrid" Path="dropdown-datagrid" Icon="receipt"></RadzenMenuItem>
+            <RadzenMenuItem Text="ListBox" Path="listbox" Icon="view_list"></RadzenMenuItem>
+            <RadzenMenuItem Text="TemplateForm" Path="templateform" Icon="line_style"></RadzenMenuItem>
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="Containers" Icon="account_box">
+            <RadzenMenuItem Text="Tabs" Path="tabs" Icon="tab"></RadzenMenuItem>
+            <RadzenMenuItem Text="Panel" Path="panel" Icon="content_paste"></RadzenMenuItem>
+            <RadzenMenuItem Text="Fieldset" Path="fieldset" Icon="account_balance_wallet"></RadzenMenuItem>
+            <RadzenMenuItem Text="Card" Path="card" Icon="line_style"></RadzenMenuItem>
+        </RadzenMenuItem>
+        <RadzenMenuItem Text="More">
+            <RadzenMenuItem Text="Item1"></RadzenMenuItem>
+            <RadzenMenuItem Text="Item2"></RadzenMenuItem>
+            <RadzenMenuItem Text="More items">
+                <RadzenMenuItem Text="More sub items">
+                    <RadzenMenuItem Text="Item1"></RadzenMenuItem>
+                    <RadzenMenuItem Text="Item2"></RadzenMenuItem>
+                </RadzenMenuItem>
+            </RadzenMenuItem>
+        </RadzenMenuItem>
+    </RadzenMenu>
+</div>
+
+<h1>Sign Up:</h1>
+
+<RadzenStack class="rz-p-0 rz-p-md-12">
+    <RadzenCard Variant="Variant.Outlined" Style="width: 100%">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+            <RadzenCheckBox @bind-Value=@popup Name="popup"></RadzenCheckBox>
+            <RadzenLabel Text="Show validators as popup" Component="popup" />
+        </RadzenStack>
+    </RadzenCard>
+    <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+        <RadzenFieldset Text="Personal Information">
+            <RadzenStack Gap="2rem" class="rz-p-4 rz-p-md-12">
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Username" Component="Username" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox style="display: block" Name="Username" @bind-Value=@model.Username class="rz-w-100" />
+                        <RadzenDataAnnotationValidator Component="Username" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="First Name" Component="FirstName" />
+                        <small style="display: block">(3-10 characters)</small>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="FirstName" @bind-Value=@model.FirstName Style="display: block; width: 100%;" />
+                        <RadzenLengthValidator Component="FirstName" Min="3" Text="First name must be at least 3 characters long" Popup=@popup Style="position: absolute" />
+                        <RadzenLengthValidator Component="FirstName" Max="10" Text="First name must be at most 10 characters long" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Last Name" Component="LastName" />
+                        <small style="display: block">(3-10 characters)</small>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="LastName" @bind-Value=@model.LastName Style="display: block; width: 100%;" />
+                        <RadzenLengthValidator Component="LastName" Min="3" Text="Last name must be at least 3 characters long" Popup=@popup Style="position: absolute" />
+                        <RadzenLengthValidator Component="LastName" Max="10" Text="Last name must be at most 10 characters long" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Email" Component="Email" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Email" @bind-Value=@model.Email Placeholder="Try with mail@example.com" Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=@popup />
+                        <RadzenEmailValidator Component="Email" Text="Provide a valid email address" Popup=@popup />
+                        <RadzenCustomValidator Component="Email" Validator="@(() => ValidateNewEmail(model.Email))" Text="Email already exists" Popup=@popup />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Password" Component="Password" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword style="display: block" Name="Password" Placeholder="Enter password..." @bind-Value=@model.Password class="rz-w-100" aria-label="enter password" />
+                        <RadzenDataAnnotationValidator Component="Password" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Confirm Password" Component="ConfirmPassword" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword style="display: block" Name="ConfirmPassword" Placeholder="Confirm password..." @bind-Value=@model.ConfirmPassword class="rz-w-100" aria-label="confirm password" />
+                        <RadzenDataAnnotationValidator Component="ConfirmPassword" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                    <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                        <RadzenButton ButtonType="ButtonType.Submit" Text="Register"></RadzenButton>
+                    </RadzenColumn>
+                </RadzenRow>
+            </RadzenStack>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</RadzenStack>
+
+<h1>Log In:</h1>
+
+<RadzenStack class="rz-p-0 rz-p-md-12">
+    <RadzenCard Variant="Variant.Outlined" Style="width: 100%">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+            <RadzenCheckBox @bind-Value=@popup Name="popup"></RadzenCheckBox>
+            <RadzenLabel Text="Show validators as popup" Component="popup" />
+        </RadzenStack>
+    </RadzenCard>
+
+    <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+        <RadzenFieldset Text="Login Information">
+            <RadzenStack Gap="2rem" class="rz-p-4 rz-p-md-12">
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Username" Component="Username" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox style="display: block" Name="Username" @bind-Value=@model.Username class="rz-w-100" />
+                        <RadzenDataAnnotationValidator Component="Username" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Email" Component="Email" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Name="Email" @bind-Value=@model.Email Style="display: block; width: 100%;" />
+                        <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=@popup Style="position: absolute" />
+                        <RadzenEmailValidator Component="Email" Text="Enter a valid email address" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Password" Component="Password" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword Name="Password" @bind-Value=@model.Password Style="display: block; width: 100%" />
+                        <RadzenRequiredValidator Component="Password" Text="Password is required" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" RowGap="0.25rem">
+                    <RadzenColumn Size="12" SizeMD="4" class="rz-text-align-start rz-text-align-md-end">
+                        <RadzenLabel Text="Repeat Password" Component="RepeatPassword" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenPassword Name="RepeatPassword" @bind-Value=@model.RepeatPassword Style="display: block; width: 100%" />
+                        <RadzenRequiredValidator Component="RepeatPassword" Text="Please confirm your password" Popup=@popup Style="position: absolute" />
+                        <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(model.RepeatPassword)) Value=@model.Password Component="RepeatPassword" Text="Passwords must match" Popup=@popup Style="position: absolute" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+                <RadzenRow AlignItems="AlignItems.Center" class="rz-mt-4">
+                    <RadzenColumn Size="12" Offset="0" SizeMD="8" OffsetMD="4">
+                        <RadzenButton ButtonType="ButtonType.Submit" Text="Log In"></RadzenButton>
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </RadzenStack>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</RadzenStack>
+
+<p>
+    Don't have an account? <a href="/registration">Register here</a>
+</p>
+
+@code {
+    class Model
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }        
+        public string Username { get; set; }        
+        public string Password { get; set; }        
+        public string ConfirmPassword { get; set; }
+        public string Zip { get; set; }
+        public string RepeatPassword { get; set; }
+    }
+
+    string[] emails = new string[] { "mail@example.com" };
+
+    bool popup;
+
+    Model model = new Model();
+
+    EventConsole console;
+
+    void OnParentClicked(MenuItemEventArgs args)
+    {
+        // console.Log($"{args.Text} clicked from parent");
+    }
+
+    void OnChildClicked(MenuItemEventArgs args)
+    {
+        // console.Log($"{args.Text} from child clicked");
+    }
+
+    bool ValidateNewEmail(string email)
+    {
+        return !emails.Any(e => e.ToUpper().Equals(email?.ToUpper()));
+    }
+
+    void OnSubmit(Model model)
+    {
+        // console.Log($"Submit: {JsonSerializer.Serialize(model, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        // console.Log($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+
+}
+

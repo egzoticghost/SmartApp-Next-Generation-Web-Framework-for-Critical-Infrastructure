@@ -1,0 +1,151 @@
+﻿@inherits LayoutComponentBase
+@inject CookieThemeService CookieThemeService
+@inject ThemeService ThemeService
+
+@using System;
+@using System.Diagnostics;
+@using Microsoft.AspNetCore.Components;
+@using Radzen;
+@using Radzen.Blazor;
+
+@code
+{
+    /// <summary>
+    /// Dark or light theme switch. Requires <see cref="ThemeService" /> to be registered in the DI container.
+    ///
+
+    public partial class RadzenAppearanceToggle : RadzenComponent
+    {
+        [Inject]
+        private ThemeService ThemeService { get; set; }
+        /// <summary>
+        /// Gets or sets the switch button variant.
+        ///
+
+        /// <value>The switch button variant.</value>
+        [Parameter]
+        public Variant Variant { get; set; } = Variant.Text;
+
+        /// <summary>
+        /// Gets or sets the switch button style.
+        ///
+
+        /// <value>The switch button style.</value>
+        [Parameter]
+        public ButtonStyle ButtonStyle { get; set; } = ButtonStyle.Base;
+
+        /// <summary>
+        /// Gets or sets the switch button toggled shade.
+        ///
+
+        /// <value>The switch button toggled shade.</value>
+        [Parameter]
+        public Shade ToggleShade { get; set; } = Shade.Default;
+
+        /// <summary>
+        /// Gets or sets the switch button toggled style.
+        ///
+
+        /// <value>The switch button toggled style.</value>
+        [Parameter]
+        public ButtonStyle ToggleButtonStyle { get; set; } = ButtonStyle.Base;
+
+        /// <summary>
+        /// Gets or sets the light theme. Not set by default - the component uses the light version of the current theme.
+        ///
+
+        [Parameter]
+        public string LightTheme { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dark theme. Not set by default - the component uses the dark version of the current theme.
+        ///
+
+        [Parameter]
+        public string DarkTheme { get; set; }
+
+        private string CurrentLightTheme => LightTheme ?? ThemeService.Theme?.ToLowerInvariant() switch
+        {
+            "dark" => "default",
+            "material-dark" => "material",
+            "fluent-dark" => "fluent",
+            "material3-dark" => "material3",
+            "software-dark" => "software",
+            "humanistic-dark" => "humanistic",
+            "standard-dark" => "standard",
+            _ => ThemeService.Theme,
+        };
+
+        private string CurrentDarkTheme => DarkTheme ?? ThemeService.Theme?.ToLowerInvariant() switch
+        {
+            "default" => "dark",
+            "material" => "material-dark",
+            "fluent" => "fluent-dark",
+            "material3" => "material3-dark",
+            "software" => "software-dark",
+            "humanistic" => "humanistic-dark",
+            "standard" => "standard-dark",
+            _ => ThemeService.Theme,
+        };
+
+        private bool value;
+
+        ///
+        // <inheritdoc />
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            ThemeService.ThemeChanged += OnThemeChanged;
+
+            value = ThemeService.Theme != CurrentDarkTheme;
+        }
+
+        private void OnThemeChanged()
+        {
+            value = ThemeService.Theme != CurrentDarkTheme;
+
+            StateHasChanged();
+        }
+
+        void OnChange(bool value)
+        {
+            ThemeService.SetTheme(value ? CurrentLightTheme : CurrentDarkTheme);
+        }
+
+        private string Icon => value ? "dark_mode" : "light_mode";
+
+        ///
+        // <inheritdoc />
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            ThemeService.ThemeChanged -= OnThemeChanged;
+        }
+    }
+}
+
+@* <RadzenComponents @rendermode="InteractiveWebAssembly" /> *@
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="2rem" Wrap="FlexWrap.Wrap">
+                <RadzenAppearanceToggle />
+            </RadzenStack>
+            <a href="/" target="_blank">Sign Up</a>
+            <a href="/" target="_blank">Log In</a>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+
+</div>

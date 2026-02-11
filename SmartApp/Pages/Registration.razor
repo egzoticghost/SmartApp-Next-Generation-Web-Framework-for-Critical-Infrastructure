@@ -1,0 +1,81 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+@page "/registration"
+@inject IJSRuntime JS
+@inject NavigationManager NavManager
+
+<h1>Register</h1>
+
+<EditForm Model="model" OnValidSubmit="@OnRegisterSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <br>
+
+    <div>
+        <label for="username">Username:</label>
+        <InputText id="username" @bind-Value="model.Username" />
+        <ValidationMessage For="() => model.Username" />
+    </div>
+
+    <br
+
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="model.Email" />
+        <ValidationMessage For="() => model.Email" />
+    </div>
+
+    <br>
+
+    <div>
+        <label for="password">Password:</label>
+        <InputText id="password" type="password" @bind-Value="model.Password" />
+        <ValidationMessage For="() => model.Password" />
+    </div>
+
+    <br>
+
+    <button type="submit">Register</button>
+</EditForm>
+
+@code {
+    private RegisterModel model = new RegisterModel();
+
+    async Task OnRegisterSubmit()
+    {
+        var http = new HttpClient { BaseAddress = new Uri("https://localhost:5001/") };
+
+        var registerPayload = new
+        {
+            Username = model.Username,
+            Email = model.Email,
+            Password = model.Password
+        };
+
+        var response = await http.PostAsJsonAsync("auth/register", registerPayload);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Możesz automatycznie zalogować lub przekierować użytkownika
+            NavManager.NavigateTo("/");
+        }
+        else
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            // TODO: pokaż błąd użytkownikowi (np. przez komponent alertu)
+        }
+    }
+
+    class RegisterModel
+    {
+        [Required]
+        public string Username { get; set; }
+
+        [Required, EmailAddress]
+        public string Email { get; set; }
+
+        [Required, MinLength(6)]
+        public string Password { get; set; }
+    }
+}

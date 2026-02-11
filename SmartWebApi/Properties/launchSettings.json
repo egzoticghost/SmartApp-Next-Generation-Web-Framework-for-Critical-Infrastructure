@@ -1,0 +1,71 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:61747",
+      "sslPort": 44348
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5086",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "Docker": {
+        "commandName": "Project",
+        "dotnetRunMessages": true,
+        "launchBrowser": true,
+        "applicationUrl": "http://localhost:5086",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      },
+      "https": {
+        "commandName": "Project",
+        "dotnetRunMessages": true,
+        "launchBrowser": true,
+        "launchUrl": "swagger",
+        "applicationUrl": "https://localhost:7235;http://localhost:5086",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      },
+      "IIS Express": {
+        "commandName": "IISExpress",
+        "launchBrowser": true,
+        "launchUrl": "swagger",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "Authentication": {
+          "Authority": "http://127.0.0.1:8080/realms/SmartApp",
+          "ClientId": "SmartApi",
+          "ClientSecret": "Ef1qbEAEIGBWlKOz2ORPRZBewJqYV0QB",
+          "RequireHttpsMetadata": false
+        }
+        //"ConnectionStrings": {
+        //  "DefaultConnection": "Host=postgres-service;Port=5432;Username=postgres;Password=password;Database=postgres"
+        //}
+        //{
+        //  "ConnectionStrings": {
+        //    "DefaultConnection": "Host=db;Port=5432;Database=smartappdb;Username=postgres;Password=30730f5weg2"
+        //  },
+        //  "Logging": {
+        //    "LogLevel": {
+        //      "Default": "Information",
+        //      "Microsoft.AspNetCore": "Warning"
+        //    }
+        //  },
+        //  "AllowedHosts": "*"
+        //}
+      }
+    }
+}

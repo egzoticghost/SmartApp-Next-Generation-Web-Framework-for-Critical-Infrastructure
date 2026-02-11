@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: smartapp-job
+spec:
+  backoffLimit: 4 # Daj mu 4 szanse na po³¹czenie
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: job
+        image: smartwebapi:local
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: Host=postgres;Port=5432;Database=SmartAppDB;Username=postgres;Password=mysecretpassword
+        command:
+        - dotnet
+        - SmartWebApp.dll

@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.0
+    container_name: keycloak
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - "8080:8080"
+    networks:
+      - smartapp-network
+
+  db:
+    image: postgres:16
+    container_name: pg_db
+    restart: always
+    environment:
+      POSTGRES_DB: smartappdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 30730f5weg2
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - smartapp-network
+
+  server:
+    build:
+      context: ./SmartApp.Server
+      dockerfile: Dockerfile
+    container_name: smartapp_server
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=smartappdb;Username=postgres;Password=30730f5weg2
+    ports:
+      - "5086:80"
+    depends_on:
+      - db
+      - keycloak
+    networks:
+      - smartapp-network
+
+  client:
+    build:
+      context: ./SmartApp.Client
+      dockerfile: Dockerfile
+    container_name: smartapp_client
+    restart: always
+    ports:
+      - "5085:80"
+    depends_on:
+      - server
+      - keycloak
+    networks:
+      - smartapp-network
+
+volumes:
+  postgres_data:
+
+networks:
+  smartapp-network:
+    driver: bridge

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartwebapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smartwebapi
+  template:
+    metadata:
+      labels:
+        app: smartwebapi
+    spec:
+      containers:
+      - name: api
+        image: smartwebapi:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: ConnectionStrings__DefaultConnection
+          value: Host=postgres;Port=5432;Database=SmartAppDB;Username=postgres;Password=mysecretpassword
+        - name: Authentication__Authority
+          value: "http://keycloak.local/realms/SmartAppRealm"
+        - name: Authentication__MetadataAddress
+          value: "http://keycloak.app:8080/realms/SmartAppRealm/.well-known/openid-configuration"
+        - name: Authentication__Audience
+          value: "smart-api"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smartwebapi
+spec:
+  type: NodePort
+  selector:
+    app: smartwebapi
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30081
+

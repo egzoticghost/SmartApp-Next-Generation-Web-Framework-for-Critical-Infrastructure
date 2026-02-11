@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  namespace: app # Upewnij się, że to ten sam namespace co pod Keycloaka!
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: keycloak.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: keycloak # Nazwa Twojego serwisu Keycloak
+            port:
+              number: 8080 # Port serwisu
+      # - env:
+      # - name: KC_HOSTNAME_STRICT
+      #   value: "false"
+      # - name: KC_HTTP_ENABLED
+      #   value: "true"
+      # - name: KC_HOSTNAME_STRICT_HTTPS
+      #   value: "false"
+      # - name: PROXY_ADDRESS_FORWARDING
+      #   value: "true"

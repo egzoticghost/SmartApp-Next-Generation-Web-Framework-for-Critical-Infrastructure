@@ -1,0 +1,70 @@
+﻿@inject IJSRuntime JS
+@inject NavigationManager NavManager
+
+@page "/login"
+@using SmartApp.Pages
+
+<h1>Login</h1>
+
+<EditForm Model="model" OnValidSubmit="@OnLoginSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <br>
+    <div>
+        <label for="username">Username:</label>
+        <InputText Id="username" @bind-Value="model.Username" />
+        <ValidationMessage For="() => model.Username" />
+    </div>
+    <br>
+    <div>
+        <label for="password">Password:</label>
+        <InputText Id="password" @bind-Value="model.Password" Type="password" />
+        <ValidationMessage For="() => model.Password" />
+    </div>
+    <br>
+    <button type="submit">Login</button>
+</EditForm>
+
+@code {
+    private LoginModel model = new LoginModel();
+
+    async Task OnLoginSubmit()
+    {
+        var http = new HttpClient { BaseAddress = new Uri("https://localhost:5001/") };
+
+        var loginPayload = new
+        {
+            Username = model.Username,
+            Password = model.Password
+        };
+
+        var response = await http.PostAsJsonAsync("auth/login", loginPayload);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadFromJsonAsync<LoginResponse>();
+            var token = content?.Token;
+
+            // Save token in localStorage
+            await JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
+            // Navigate to protected page
+            NavManager.NavigateTo("/dashboard");
+        }
+        else
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            // Show error
+        }
+    }
+
+    class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
+    class LoginResponse
+    {
+        public string Token { get; set; }
+    }
+}

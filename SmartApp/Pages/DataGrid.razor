@@ -1,0 +1,104 @@
+﻿@page "/datagrid"
+
+<PageTitle>DataGrid</PageTitle>
+
+<h1>DataGrid</h1>
+
+Display tabular data with ease. Perform paging, sorting and filtering through Entity Framework without extra code.
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Advanced" AllowSorting="true" PageSize="5" AllowPaging="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"
+                Data="@employees" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(Employee.EmployeeID)" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn Title="Photo" Frozen="true" Sortable="false" Filterable="false" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <RadzenImage Path="@data.Photo" class="rz-gravatar" AlternateText="@(data.FirstName + " " + data.LastName)" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(Employee.FirstName)" Title="First Name" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.LastName)" Title="Last Name" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Title)" Title="Job Title" Width="200px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.TitleOfCourtesy)" Title="Title" Width="120px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.BirthDate)" Title="Birth Date" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.HireDate)" Title="Hire Date" FormatString="{0:d}" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Address)" Title="Address" Width="200px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.City)" Title="City" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Region)" Title="Region" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.PostalCode)" Title="Postal Code" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Country)" Title="Country" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.HomePhone)" Title="Home Phone" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Extension)" Title="Extension" Width="160px" />
+        <RadzenDataGridColumn Property="@nameof(Employee.Notes)" Title="Notes" Width="300px" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    List<Employee> employees;
+    IList<Employee> selectedEmployees;
+
+    List<Employee> Employees { get; set; } = new List<Employee>();
+
+    public class Employee
+    {
+
+        public int EmployeeID { get; set; }
+        public string Photo { get; set; }
+        public int FirstName { get; set; }
+        public int LastName { get; set; }
+        public int Title { get; set; }
+        public int TitleOfCourtesy { get; set; }
+        public int BirthDate { get; set; }
+        public int HireDate { get; set; }
+        public int Address { get; set; }
+        public int City { get; set; }
+        public int Region { get; set; }
+        public int PostalCode { get; set; }
+        public int Country { get; set; }
+        public int HomePhone { get; set; }
+        public int Extension { get; set; }
+        public int Notes { get; set; }
+        public int dbContext { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        employees = new List<Employee>() { new Employee() };
+
+        selectedEmployees = new List<Employee>() { employees.FirstOrDefault() };
+    }
+
+// using System;
+// using System.Net.Http;
+// using System.Threading.Tasks;
+
+    public class BackendService
+    {
+        private readonly HttpClient _httpClient;
+
+        // HttpClient można wstrzykiwać przez DI lub inicjalizować jako statyczny/singleton
+        public BackendService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+            // Opcjonalnie ustaw bazowy adres backendu:
+            _httpClient.BaseAddress = new Uri("https://localhost:7235/swagger/index.html");
+        }
+
+        // Przykład zapytania GET zwracającego surowy JSON jako string
+        public async Task<string> GetDataAsync(string endpoint)
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
+            response.EnsureSuccessStatusCode(); // rzuci wyjątek, jeśli status nie jest 2xx
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        // Generyczna metoda, która pobiera dane i deserializuje je do typu T
+        // public async Task<T> GetDataAsync<T>(string endpoint)
+        // {
+        //     string json = await GetDataAsync(endpoint);
+        //     return JsonSerializer.Deserialize<T>(json);
+        // }
+    }
+
+}

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: smartapp-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false" # <--- DODAJ TO
+    # nginx.ingress.kubernetes.io/rewrite-target: /  <--- UPEWNIJ SIĘ, ŻE TEGO NIE MA DLA FRONTENDU!
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: smartapp.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: smartapp
+            port:
+              number: 80

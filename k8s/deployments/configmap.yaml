@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name smartapp.local;
+        location / {
+            proxy_pass http://smartapp.local:30082;
+        }
+    }
+    server {
+        listen 80;
+        server_name smartwebapi.local;
+        location / {
+            proxy_pass http://smartwebapi.local:30081/swagger;
+        }
+    }

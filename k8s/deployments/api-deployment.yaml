@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartwebapi
+  namespace: app
+  labels:
+    app: smartwebapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smartwebapi
+  template:
+    metadata:
+      labels:
+        app: smartwebapi
+    spec:
+      containers:
+        - name: smartwebapi
+          image: egzoticghost/smartwebapi:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: RequireHttpsMetadata
+              value: "false"
+            - name: ASPNETCORE_URLS
+              value: "http://+:8080"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Host=postgres;Database=postgres;Username=postgres;Password=30730f5weg2"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smartwebapi
+  namespace: app
+spec:
+  selector:
+    app: smartwebapi
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+
