@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace SmartWebApp.Migrations
+namespace SmartWebApi.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -34,3 +34,4 @@ namespace SmartWebApp.Migrations
         }
     }
 }
+

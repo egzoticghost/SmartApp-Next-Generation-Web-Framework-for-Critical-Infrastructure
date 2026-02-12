@@ -1,4 +1,4 @@
-namespace SmartWebApp
+namespace SmartWebApi
 {
     public class WeatherForecast
     {

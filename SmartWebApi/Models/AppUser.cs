@@ -1,4 +1,4 @@
-﻿namespace SmartWebApp.Models
+﻿namespace SmartWebApi.Models
 {
     public class AppUser
     {

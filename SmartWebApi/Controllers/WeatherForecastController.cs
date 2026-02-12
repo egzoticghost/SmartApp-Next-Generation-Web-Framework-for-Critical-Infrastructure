@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace SmartWebApp.Controllers
+namespace SmartWebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

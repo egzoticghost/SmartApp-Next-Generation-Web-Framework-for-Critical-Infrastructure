@@ -15,7 +15,7 @@ services:
       - smartapp-network
 
   postgres:
-    image: postgres:16
+    image: postgres:18
     container_name: smart_postgres
     environment:
       POSTGRES_USER: postgres
@@ -44,7 +44,7 @@ services:
 
   smart_api:
     build:
-      context: ./SmartWebApp
+      context: ./SmartWebApi
       dockerfile: Dockerfile
     container_name: smart_api
     environment:

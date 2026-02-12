@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace SmartWebApp
+namespace SmartWebApi
 {
     // Add the LoginResponse class definition
     public class LoginResponse

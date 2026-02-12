@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace SmartWebApp.Data
+namespace SmartWebApi.Data
 {
     public class UserDbContext : DbContext
     {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using SmartWebApp.Data; // Ensure the namespace 'SmartWebApp.Data' exists in your project
-using SmartWebApp.Services; // Add this using directive if AuthService is in this namespace
+using SmartWebApi.Data; // Ensure the namespace 'SmartWebApi.Data' exists in your project
+using SmartWebApi.Services; // Add this using directive if AuthService is in this namespace
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,10 +63,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        // Adres URL Twojego Keycloaka (widoczny w klastrze)
+        // Your Keycloak URL (visible in cluster)
         options.Authority = "http://keycloak.local/realms/SmartAppRealm";
         options.Audience = "smart-api";
-        options.RequireHttpsMetadata = false; // Bo lokalnie używamy HTTP
+        options.RequireHttpsMetadata = false; // Because we use HTTP locally
 
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
@@ -85,7 +85,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("BlazorPolicy", policy =>
     {
-        policy.WithOrigins("http://smartapp.local") // Adres Twojego frontendu
+        policy.WithOrigins("http://smartapp.local") // Your frontend address
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -118,7 +118,7 @@ public class HomeController : Controller
     [Authorize]
     public IActionResult Secure()
     {
-        return View(); // widok dostępny tylko po zalogowaniu
+        return View(); // view available only after logging in
     }
 
     public IActionResult Login()

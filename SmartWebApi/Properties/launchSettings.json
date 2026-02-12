@@ -46,7 +46,7 @@
           "ASPNETCORE_ENVIRONMENT": "Development"
         },
         "Authentication": {
-          "Authority": "http://127.0.0.1:8080/realms/SmartApp",
+          "Authority": "http://keycloak:8080/realms/smart-blazor",
           "ClientId": "SmartApi",
           "ClientSecret": "Ef1qbEAEIGBWlKOz2ORPRZBewJqYV0QB",
           "RequireHttpsMetadata": false

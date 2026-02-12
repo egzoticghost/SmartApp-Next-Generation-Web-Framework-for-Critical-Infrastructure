@@ -1,4 +1,4 @@
-namespace SmartWebApp.Services
+namespace SmartWebApi.Services
 {
     public interface IJwtService
     {

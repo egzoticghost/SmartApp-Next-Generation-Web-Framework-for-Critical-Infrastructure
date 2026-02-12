@@ -1,6 +1,6 @@
 ﻿using AspnetUserApi;
 using Microsoft.EntityFrameworkCore;
-using SmartWebApp.Data; // <-- Corrected namespace for AppDbContext
+using SmartWebApi.Data; // <-- Corrected namespace for AppDbContext
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens; // <-- Add this using directive
-//using SmartWebApp.Data.Models; // <-- Corrected namespace for AppUser model
+//using SmartWebApi.Data.Models; // <-- Corrected namespace for AppUser model
 
 namespace SmartApp.Handlers
 {
@@ -29,9 +29,9 @@ namespace SmartApp.Handlers
             _httpClient = httpClient;
             //_dbContext = dbContext; // <-- Assign dbContext
 
-            _introspectionEndpoint = "https://your-idp.com/oauth2/introspect"; // <-- zmień
-            _clientId = "your-client-id"; // <-- zmień
-            _clientSecret = "your-client-secret"; // <-- zmień
+            _introspectionEndpoint = "https://your-idp.com/oauth2/introspect"; // <-- change this to a secure value
+            _clientId = "your-client-id"; // <-- change this to a secure value
+            _clientSecret = "your-client-secret"; // <-- change this to a secure value
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -71,7 +71,7 @@ namespace SmartApp.Handlers
             }
 
             // 2. Extract user identifier (e.g. "sub" or "preferred_username")
-            string userId = json.RootElement.GetProperty("sub").GetString(); // możesz też użyć: "preferred_username"
+            string userId = json.RootElement.GetProperty("sub").GetString(); // you can also use: "preferred_username"
             string username = json.RootElement.TryGetProperty("preferred_username", out var userProp)
                 ? userProp.GetString()
                 : userId;
@@ -79,7 +79,7 @@ namespace SmartApp.Handlers
             var claims = new[]
 {
     new Claim(ClaimTypes.Name, username),
-    // new Claim(ClaimTypes.Role, user.Role) // <- dodaj to
+    // new Claim(ClaimTypes.Role, user.Role) // <- add it
 };
 
             // Add signing credentials for JWT token creation
@@ -112,7 +112,7 @@ namespace SmartApp.Handlers
             //    await _dbContext.SaveChangesAsync(cancellationToken);
             //}
 
-            // Dalej przekaż żądanie
+            // Forward the request
             return await base.SendAsync(request, cancellationToken);
         }
     }

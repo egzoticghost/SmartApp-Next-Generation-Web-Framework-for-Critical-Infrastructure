@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace SmartWebApp.Migrations
+namespace SmartWebApi.Migrations
 {
     [DbContext(typeof(UserDbContext))]
     [Migration("20250321190700_InitialCreate")]
@@ -48,3 +48,4 @@ namespace SmartWebApp.Migrations
         }
     }
 }
+

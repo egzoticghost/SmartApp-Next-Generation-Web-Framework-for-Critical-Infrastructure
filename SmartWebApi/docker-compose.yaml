@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:16
+    image: postgres:18
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
@@ -28,3 +28,4 @@ services:
 
 volumes:
   postgres_data:
+

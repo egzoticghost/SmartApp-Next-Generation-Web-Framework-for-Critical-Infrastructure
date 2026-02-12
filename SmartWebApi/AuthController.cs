@@ -1,7 +1,7 @@
 ﻿using AspnetUserApi;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using SmartWebApp.Services;
+using SmartWebApi.Services;
 
 [ApiController]
 [Route("auth")]

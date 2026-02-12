@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SmartWebApp.Models; // <-- Add this using directive
+using SmartWebApi.Models; // <-- Add this using directive
 
-namespace SmartWebApp.Data
+namespace SmartWebApi.Data
 {
     public class AppDbContext : DbContext
     {
@@ -10,3 +10,4 @@ namespace SmartWebApp.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
 }
+
